@@ -1,6 +1,0 @@
-FROM archlinux/base
-
-COPY . /srv/PCSX2appimage
-
-WORKDIR /srv/PCSX2appimage
-RUN /srv/PCSX2appimage/deployscript/archlinux-PCSX2-deploy.sh
