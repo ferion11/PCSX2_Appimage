@@ -8,4 +8,4 @@ PCSX2 Appimage that include all 32bits deps, for all linux 64bits (include no-mu
 #### 3- Run it:
 - `$ ./pcsx2-i386_x86_64-archlinux.AppImage`
 #### 4- To plugins work:
-- `Change the plugins default path to "$HOME/.config/PCSX2/appimage_installation"`
+- `Change the plugins default path to "$HOME/.config/PCSX2/appimage_installation/usr/lib32/pcsx2/"`
