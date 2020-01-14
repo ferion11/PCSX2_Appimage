@@ -1,38 +1,50 @@
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
+PCSX2_HOME="$HOME/.config/PCSX2"
+HERE_LINK="$PCSX2_HOME/appimage_installation"
+#------------------------------
+
+make_dir() { [ ! -d "$1" ] && mkdir -p "$1"; };
+#------------------------------
+
+#Using (and updating) links to plugin path
+make_dir "$PCSX2_HOME"
+rm -rf "$HERE_LINK"
+ln -s "$HERE" "$HERE_LINK"
+#------------------------------
 
 # If not extract and overwrite, $HERE/lib is a link to $HERE/usr/lib, that link to $HERE/usr/lib64
-export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/usr/lib32":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE_LINK/usr/lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE_LINK/lib":$LD_LIBRARY_PATH
 
 
 #Sound Library
-export LD_LIBRARY_PATH="$HERE/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
 
 # libGL drivers
-export LIBGL_DRIVERS_PATH="$HERE/usr/lib32/dri":$LIBGL_DRIVERS_PATH
+export LIBGL_DRIVERS_PATH="$HERE_LINK/usr/lib32/dri":$LIBGL_DRIVERS_PATH
 
 #Font Config
-export FONTCONFIG_PATH="$HERE/etc/fonts":$FONTCONFIG_PATH
+export FONTCONFIG_PATH="$HERE_LINK/etc/fonts":$FONTCONFIG_PATH
 
 #LD
-export LIB32LDLIBRARY="$HERE/usr/lib32/ld-linux.so.2"
+export LIB32LDLIBRARY="$HERE_LINK/usr/lib32/ld-linux.so.2"
 
 # GStreamer environment variables
 export GST_REGISTRY_REUSE_PLUGIN_SCANNER="no"
-export GST_PLUGIN_SYSTEM_PATH_1_0="${HERE}/usr/lib32/gstreamer-1.0/"
+export GST_PLUGIN_SYSTEM_PATH_1_0="${HERE_LINK}/usr/lib32/gstreamer-1.0/"
 
-export GST_PLUGIN_SCANNER_1_0="${HERE}/usr/lib32/gstreamer-1.0/gst-plugin-scanner"
-export GST_PTP_HELPER_1_0="${HERE}/usr/lib32/gstreamer-1.0/gst-ptp-helper"
+export GST_PLUGIN_SCANNER_1_0="${HERE_LINK}/usr/lib32/gstreamer-1.0/gst-plugin-scanner"
+export GST_PTP_HELPER_1_0="${HERE_LINK}/usr/lib32/gstreamer-1.0/gst-ptp-helper"
 
 export GST_PLUGIN_PATH=${GST_PLUGIN_SYSTEM_PATH_1_0}
 export GST_PLUGIN_SYSTEM_PATH=${GST_PLUGIN_SYSTEM_PATH_1_0}
 export GST_PLUGIN_SCANNER=${GST_PLUGIN_SCANNER_1_0}
+#------------------------------
 
-
-MAIN="$HERE/usr/bin/PCSX2"
+MAIN="$HERE_LINK/usr/bin/PCSX2"
 
 export __GL_THREADED_OPTIMIZATIONS=1
 $LIB32LDLIBRARY "$MAIN" "$@" | cat
