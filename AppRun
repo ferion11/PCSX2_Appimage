@@ -64,5 +64,6 @@ else
 	MAIN="$HERE_LINK/usr/bin/PCSX2"
 fi
 
+export PATH=$HERE/bin:$HERE/usr/bin:$PATH
 export __GL_THREADED_OPTIMIZATIONS=1
 $LIB32LDLIBRARY "$MAIN" "$@" | cat
