@@ -64,6 +64,11 @@ else
 	MAIN="$HERE_LINK/usr/bin/PCSX2"
 fi
 
+# Exec outside apps with inside environment (make the link name "ExternalExec")
+if [ "$BINARY_NAME" = "ExternalExec" ] && [ -n "$1" ] && [ -x "$1" ]; then
+	MAIN="$1" ; shift
+fi
+
 export PATH=$HERE/bin:$HERE/usr/bin:$PATH
 export __GL_THREADED_OPTIMIZATIONS=1
 $LIB32LDLIBRARY "$MAIN" "$@" | cat
