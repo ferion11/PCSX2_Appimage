@@ -190,4 +190,4 @@ cp resource/* $PCSX2_WORKDIR
 
 ./appimagetool.AppImage --appimage-extract
 
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-i386*arch*.AppImage.zsync' pcsx2-i386_${ARCH}-archlinux.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-1.4.0-*arch*.AppImage.zsync' pcsx2-1.4.0-${ARCH}-archlinux.AppImage
