@@ -1,23 +1,31 @@
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
+MY_APPIMAGE_TMP_DIR="$HERE"_tmp
 PCSX2_HOME="$HOME/.config/PCSX2"
 HERE_LINK="$PCSX2_HOME/appimage_installation"
-#------------------------------
+#===================================================================
 
 make_dir() { [ ! -d "$1" ] && mkdir -p "$1"; };
 #------------------------------
+
+# Create a tmp dir to some utils like vulkan:
+if [ -d "$1" ]; then
+	rm -rf "$MY_APPIMAGE_TMP_DIR"
+fi
+mkdir "$MY_APPIMAGE_TMP_DIR"
+#===================================================================
 
 #Using (and updating) links to plugin path
 make_dir "$PCSX2_HOME"
 rm -rf "$HERE_LINK"
 ln -s "$HERE" "$HERE_LINK"
-#------------------------------
+#===================================================================
 
 # If not extract and overwrite, $HERE/lib is a link to $HERE/usr/lib, that link to $HERE/usr/lib64
 export LD_LIBRARY_PATH="$HERE_LINK/usr/lib":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE_LINK/lib":$LD_LIBRARY_PATH
-
+#------------------------------
 
 #Sound Library
 export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
@@ -31,6 +39,7 @@ export FONTCONFIG_PATH="$HERE_LINK/etc/fonts":$FONTCONFIG_PATH
 
 #LD
 export LIB32LDLIBRARY="$HERE_LINK/usr/lib32/ld-linux.so.2"
+#------------------------------
 
 # GStreamer environment variables
 export GST_REGISTRY_REUSE_PLUGIN_SCANNER="no"
@@ -42,7 +51,38 @@ export GST_PTP_HELPER_1_0="${HERE_LINK}/usr/lib32/gstreamer-1.0/gst-ptp-helper"
 export GST_PLUGIN_PATH=${GST_PLUGIN_SYSTEM_PATH_1_0}
 export GST_PLUGIN_SYSTEM_PATH=${GST_PLUGIN_SYSTEM_PATH_1_0}
 export GST_PLUGIN_SCANNER=${GST_PLUGIN_SCANNER_1_0}
-#------------------------------
+#===================================================================
+
+# For Vulkan drivers:
+# intel:
+cat > $MY_APPIMAGE_TMP_DIR/intel_icd.i686.json << EOF
+{
+    "ICD": {
+        "api_version": "1.1.102",
+        "library_path": "$HERE/usr/lib32/libvulkan_intel.so"
+    },
+    "file_format_version": "1.0.0"
+}
+EOF
+
+# radeon:
+cat > $MY_APPIMAGE_TMP_DIR/radeon_icd.i686.json << EOF
+{
+    "ICD": {
+        "api_version": "1.1.107",
+        "library_path": "$HERE/usr/lib32/libvulkan_radeon.so"
+    },
+    "file_format_version": "1.0.0"
+}
+EOF
+#----------------------------------------
+
+# Setting just intel for now, it's the default. But the user can change the variable VK_ICD_FILENAMES
+if [ -z "$VK_ICD_FILENAMES" ]
+then
+	export VK_ICD_FILENAMES="$MY_APPIMAGE_TMP_DIR/intel_icd.i686.json"
+fi
+#===================================================================
 
 # Allow the AppImage to be symlinked to e.g., /usr/bin/glxinfo32 or /usr/bin/glxgears32
 if [ -n "$APPIMAGE" ] ; then
@@ -68,7 +108,13 @@ fi
 if [ "$BINARY_NAME" = "ExternalExec" ] && [ -n "$1" ] && [ -x "$1" ]; then
 	MAIN="$1" ; shift
 fi
+#===================================================================
 
 export PATH=$HERE/bin:$HERE/usr/bin:$PATH
 export __GL_THREADED_OPTIMIZATIONS=1
 $LIB32LDLIBRARY "$MAIN" "$@" | cat
+
+#===================================================================
+
+# clean tmp files:
+rm -rf "$MY_APPIMAGE_TMP_DIR"
