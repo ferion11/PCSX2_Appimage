@@ -92,14 +92,14 @@ else
 fi
 
 MAIN="$HERE_LINK/usr/bin/PCSX2"
-if [ -n "$1" ] && [ -x "$HERE/bin/$1" ] ; then
-	MAIN="$HERE/bin/$1" ; shift
-elif [ -n "$1" ] && [ -x "$HERE/usr/bin/$1" ] ; then
-	MAIN="$HERE/usr/bin/$1" ; shift
-elif [ -x "$HERE/bin/$BINARY_NAME" ] ; then
-	MAIN="$HERE/bin/$BINARY_NAME"
-elif [ -x "$HERE/usr/bin/$BINARY_NAME" ] ; then
-	MAIN="$HERE/usr/bin/$BINARY_NAME"
+if [ -n "$1" ] && [ -x "$HERE_LINK/bin/$1" ] ; then
+	MAIN="$HERE_LINK/bin/$1" ; shift
+elif [ -n "$1" ] && [ -x "$HERE_LINK/usr/bin/$1" ] ; then
+	MAIN="$HERE_LINK/usr/bin/$1" ; shift
+elif [ -x "$HERE_LINK/bin/$BINARY_NAME" ] ; then
+	MAIN="$HERE_LINK/bin/$BINARY_NAME"
+elif [ -x "$HERE_LINK/usr/bin/$BINARY_NAME" ] ; then
+	MAIN="$HERE_LINK/usr/bin/$BINARY_NAME"
 else
 	MAIN="$HERE_LINK/usr/bin/PCSX2"
 fi
@@ -110,7 +110,7 @@ if [ "$BINARY_NAME" = "ExternalExec" ] && [ -n "$1" ] && [ -x "$1" ]; then
 fi
 #===================================================================
 
-export PATH=$HERE/bin:$HERE/usr/bin:$PATH
+export PATH=$HERE_LINK/bin:$HERE_LINK/usr/bin:$PATH
 export __GL_THREADED_OPTIMIZATIONS=1
 $LIB32LDLIBRARY "$MAIN" "$@" | cat
 
