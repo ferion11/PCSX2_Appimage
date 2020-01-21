@@ -108,8 +108,12 @@ dependencys=$(pactree -s -u pcsx2 |grep lib32 | xargs)
 mkdir cache
 
 pacman -Scc --noconfirm
-pacman -Syw --noconfirm --cachedir cache pcsx2 lib32-alsa-lib lib32-alsa-plugins lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-openal lib32-sdl2 lib32-libdrm lib32-libva lib32-portaudio lib32-sdl2 lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-virtualgl lib32-ladspa lib32-libao lib32-libpulse lib32-libcanberra-pulse lib32-glew lib32-mesa-demos lib32-libxinerama lib32-vulkan-icd-loader lib32-vulkan-intel lib32-vulkan-radeon lib32-gtk2 lib32-wxgtk2 $dependencys || die "ERROR: Some packages not found!!!"
+pacman -Syw --noconfirm --cachedir cache pcsx2 lib32-nvidia-utils lib32-nvidia-390xx-utils lib32-alsa-lib lib32-alsa-plugins lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-openal lib32-sdl2 lib32-libdrm lib32-libva lib32-portaudio lib32-sdl2 lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-virtualgl lib32-ladspa lib32-libao lib32-libpulse lib32-libcanberra-pulse lib32-glew lib32-mesa-demos lib32-libxinerama lib32-vulkan-icd-loader lib32-vulkan-intel lib32-vulkan-radeon lib32-gtk2 lib32-wxgtk2 $dependencys || die "ERROR: Some packages not found!!!"
 #---------------------------------
+
+#Save nvidia packages for later
+mv ./cache/lib32-nvidia-utils* ../
+mv ./cache/lib32-nvidia-390xx-utils* ../
 
 # Remove non lib32 pkgs before extracting (save pcsx2 package):
 mv ./cache/pcsx2* ./
@@ -144,8 +148,8 @@ rm -rf usr/src; rm -rf usr/share; rm usr/sbin; rm -rf usr/local; rm usr/lib/{*.a
 #---------------------------------
 
 # Install pcsx2 after clean (to keep icons, themes...)
-find ./ -name 'pcsx2*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./ -name 'pcsx2*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name 'pcsx2*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name 'pcsx2*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 rm ./pcsx2*
 #===========================================================================================
 
@@ -197,43 +201,37 @@ cp resource/* $PCSX2_WORKDIR
 
 # Nvidia variation with lib32-nvidia-utils:
 PCSX2_NVIDIA_WORKDIR="pcsx2_nvidia_version"
-cp -rp $WINE_WORKDIR $PCSX2_NVIDIA_WORKDIR
-cd $PCSX2_NVIDIA_WORKDIR
+cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_WORKDIR"
+cd "$PCSX2_NVIDIA_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_WORKDIR"
+mv ../lib32-nvidia-utils* ./
 
 # Remove opensource nouveau:
 rm -rf usr/lib32/dri/nouveau*
 rm -rf usr/lib32/libdrm_nouveau*
 
-mkdir cache
-pacman -Syw --noconfirm --cachedir cache lib32-nvidia-utils || die "ERROR: Some packages not found!!!"
-echo "All files in NVIDIA ./cache: $(ls ./cache)"
-
 # extracting *tar.xz and *tar.zst
-find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./cache -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
-rm -rf cache
+rm -rf lib32-nvidia-utils*
 cd ..
 #===========================================================================================
 
 # Nvidia Legacy variation with lib32-nvidia-390xx-utils:
 PCSX2_NVIDIA_LEGACY_WORKDIR="pcsx2_nvidia_legacy_version"
-cp -rp $WINE_WORKDIR $PCSX2_NVIDIA_LEGACY_WORKDIR
-cd $PCSX2_NVIDIA_LEGACY_WORKDIR
+cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_LEGACY_WORKDIR"
+cd "$PCSX2_NVIDIA_LEGACY_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_LEGACY_WORKDIR"
+mv ../lib32-nvidia-390xx-utils* ./
 
 # Remove opensource nouveau:
 rm -rf usr/lib32/dri/nouveau*
 rm -rf usr/lib32/libdrm_nouveau*
 
-mkdir cache
-pacman -Syw --noconfirm --cachedir cache lib32-nvidia-390xx-utils || die "ERROR: Some packages not found!!!"
-echo "All files in NVIDIA Legacy ./cache: $(ls ./cache)"
-
 # extracting *tar.xz *tar.zst...
-find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./cache -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
-rm -rf cache
+rm -rf lib32-nvidia-390xx-utils*
 cd ..
 #===========================================================================================
 
