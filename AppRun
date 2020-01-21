@@ -1,18 +1,34 @@
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
-MY_APPIMAGE_TMP_DIR="$HERE"_tmp
 PCSX2_HOME="$HOME/.config/PCSX2"
 HERE_LINK="$PCSX2_HOME/appimage_installation"
+F11_APPIMAGE_TMP_DIR="$HERE"_tmp
+F11_APPIMAGE_CONF_DIR="$HOME/.config/f11conf"
+F11_APPIMAGE_VKCONF="$F11_APPIMAGE_CONF_DIR/vulkan.conf"
 #===================================================================
 
 make_dir() { [ ! -d "$1" ] && mkdir -p "$1"; };
 #------------------------------
 
-# Create a tmp dir to some utils like vulkan:
-if [ -d "$1" ]; then
-	rm -rf "$MY_APPIMAGE_TMP_DIR"
+# Configure AppImage:
+if [ "$1" = "f11conf" ] ; then
+	echo "Init Configuration:"
+	make_dir F11_APPIMAGE_CONF_DIR
+	#like: pcsx2.appimage f11conf vulkan radeon:intel
+	if [ "$2" = "vulkan" ] ; then
+		cat > $F11_APPIMAGE_VKCONF << EOF
+F11_VULKAN=$3
+EOF
+	fi
+	echo "Configuration done! "
+	exit 0
 fi
-mkdir "$MY_APPIMAGE_TMP_DIR"
+
+# Create a tmp dir to some utils like vulkan (need one new, so remove the old):
+if [ -d "$F11_APPIMAGE_TMP_DIR" ]; then
+	rm -rf "$F11_APPIMAGE_TMP_DIR"
+fi
+mkdir "$F11_APPIMAGE_TMP_DIR"
 #===================================================================
 
 #Using (and updating) links to plugin path
@@ -54,8 +70,20 @@ export GST_PLUGIN_SCANNER=${GST_PLUGIN_SCANNER_1_0}
 #===================================================================
 
 # For Vulkan drivers:
-# intel:
-cat > $MY_APPIMAGE_TMP_DIR/intel_icd.i686.json << EOF
+# Setting VK_ICD_FILENAMES... But the user can use his own variable for local drivers
+if [ -n "$VK_ICD_FILENAMES" ]
+then
+	echo "Using user \$VK_ICD_FILENAMES: $VK_ICD_FILENAMES"
+elif [ -f "$F11_APPIMAGE_VKCONF" ]; then
+	. "$F11_APPIMAGE_VKCONF"
+	
+	IFS_TMP=$IFS
+	IFS=:
+	for driver in $F11_VULKAN do
+		#echo "$driver"
+		if [ "$driver" = "intel" ]; then
+			export VK_ICD_FILENAMES="$VK_ICD_FILENAMES:$F11_APPIMAGE_TMP_DIR/intel_icd.i686.json"
+			cat > $F11_APPIMAGE_TMP_DIR/intel_icd.i686.json << EOF
 {
     "ICD": {
         "api_version": "1.1.102",
@@ -64,9 +92,9 @@ cat > $MY_APPIMAGE_TMP_DIR/intel_icd.i686.json << EOF
     "file_format_version": "1.0.0"
 }
 EOF
-
-# radeon:
-cat > $MY_APPIMAGE_TMP_DIR/radeon_icd.i686.json << EOF
+		elif [ "$driver" = "radeon" ]; then
+			export VK_ICD_FILENAMES="$VK_ICD_FILENAMES:$F11_APPIMAGE_TMP_DIR/radeon_icd.i686.json"
+			cat > $F11_APPIMAGE_TMP_DIR/radeon_icd.i686.json << EOF
 {
     "ICD": {
         "api_version": "1.1.107",
@@ -75,12 +103,12 @@ cat > $MY_APPIMAGE_TMP_DIR/radeon_icd.i686.json << EOF
     "file_format_version": "1.0.0"
 }
 EOF
-#----------------------------------------
-
-# Setting just intel for now, it's the default. But the user can change the variable VK_ICD_FILENAMES
-if [ -z "$VK_ICD_FILENAMES" ]
-then
-	export VK_ICD_FILENAMES="$MY_APPIMAGE_TMP_DIR/intel_icd.i686.json"
+		else
+			echo "ERROR: Driver \"$driver\" unsupported yet!!!"
+		fi
+	done
+	
+	IFS=$IFS_TMP
 fi
 #===================================================================
 
@@ -117,4 +145,4 @@ $LIB32LDLIBRARY "$MAIN" "$@" | cat
 #===================================================================
 
 # clean tmp files:
-rm -rf "$MY_APPIMAGE_TMP_DIR"
+rm -rf "$F11_APPIMAGE_TMP_DIR"
