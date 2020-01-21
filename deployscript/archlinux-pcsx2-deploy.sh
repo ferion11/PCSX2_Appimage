@@ -123,10 +123,8 @@ echo "All files in ./cache: $(ls ./cache)"
 #get_archlinux32_pkgs ./cache/ gst-libav libwbclient tevent talloc ldb libbsd avahi libarchive smbclient libsoxr libssh vid.stab l-smash libtirpc
 #---------------------------------
 
-# extracting *tar.xz...
+# extracting *tar.xz *tar.zst...
 find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-
-# extracting *tar.zst...
 find ./cache -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
 # Install vulkan tools:
@@ -184,11 +182,10 @@ mv -n libva-x11.so.1 usr/lib32
 
 # Disable internal PulseAudio
 rm etc/asound.conf; rm -rf etc/modprobe.d/alsa.conf; rm -rf etc/pulse
-
-#===========================================================================================
-# appimage
 cd ..
+#===========================================================================================
 
+# Get AppImage and setting $PCSX2_WORKDIR:
 wget -nv -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O  appimagetool.AppImage
 chmod +x appimagetool.AppImage
 
@@ -196,7 +193,53 @@ chmod +x AppRun
 
 cp AppRun $PCSX2_WORKDIR
 cp resource/* $PCSX2_WORKDIR
+#===========================================================================================
 
+# Nvidia variation with lib32-nvidia-utils:
+PCSX2_NVIDIA_WORKDIR="pcsx2_nvidia_version"
+cp -rp $WINE_WORKDIR $PCSX2_NVIDIA_WORKDIR
+cd $PCSX2_NVIDIA_WORKDIR
+
+# Remove opensource nouveau:
+rm -rf usr/lib32/dri/nouveau*
+rm -rf usr/lib32/libdrm_nouveau*
+
+mkdir cache
+pacman -Syw --noconfirm --cachedir cache lib32-nvidia-utils || die "ERROR: Some packages not found!!!"
+echo "All files in NVIDIA ./cache: $(ls ./cache)"
+
+# extracting *tar.xz and *tar.zst
+find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./cache -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+
+rm -rf cache
+cd ..
+#===========================================================================================
+
+# Nvidia Legacy variation with lib32-nvidia-390xx-utils:
+PCSX2_NVIDIA_LEGACY_WORKDIR="pcsx2_nvidia_legacy_version"
+cp -rp $WINE_WORKDIR $PCSX2_NVIDIA_LEGACY_WORKDIR
+cd $PCSX2_NVIDIA_LEGACY_WORKDIR
+
+# Remove opensource nouveau:
+rm -rf usr/lib32/dri/nouveau*
+rm -rf usr/lib32/libdrm_nouveau*
+
+mkdir cache
+pacman -Syw --noconfirm --cachedir cache lib32-nvidia-390xx-utils || die "ERROR: Some packages not found!!!"
+echo "All files in NVIDIA Legacy ./cache: $(ls ./cache)"
+
+# extracting *tar.xz *tar.zst...
+find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./cache -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+
+rm -rf cache
+cd ..
+#===========================================================================================
+
+# AppImage generation:
 ./appimagetool.AppImage --appimage-extract
 
 export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-1.4.0-*arch*.AppImage.zsync' pcsx2-1.4.0-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-1.4.0-*arch*.AppImage.zsync' pcsx2_NVIDIA-1.4.0-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_LEGACY_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA_LEGACY-1.4.0-*arch*.AppImage.zsync' pcsx2_NVIDIA_LEGACY-1.4.0-${ARCH}.AppImage
