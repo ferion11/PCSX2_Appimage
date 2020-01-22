@@ -79,7 +79,7 @@ elif [ -f "$F11_APPIMAGE_VKCONF" ]; then
 	
 	IFS_TMP=$IFS
 	IFS=:
-	for driver in $F11_VULKAN do
+	for driver in $F11_VULKAN; do
 		#echo "$driver"
 		if [ "$driver" = "intel" ]; then
 			export VK_ICD_FILENAMES="$VK_ICD_FILENAMES:$F11_APPIMAGE_TMP_DIR/intel_icd.i686.json"
