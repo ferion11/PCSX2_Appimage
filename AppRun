@@ -13,12 +13,13 @@ make_dir() { [ ! -d "$1" ] && mkdir -p "$1"; };
 # Configure AppImage:
 if [ "$1" = "f11conf" ] ; then
 	echo "Init Configuration:"
-	make_dir F11_APPIMAGE_CONF_DIR
+	make_dir $F11_APPIMAGE_CONF_DIR
 	#like: pcsx2.appimage f11conf vulkan radeon:intel
 	if [ "$2" = "vulkan" ] ; then
 		cat > $F11_APPIMAGE_VKCONF << EOF
 F11_VULKAN=$3
 EOF
+		cat $F11_APPIMAGE_VKCONF
 	fi
 	echo "Configuration done! "
 	exit 0
