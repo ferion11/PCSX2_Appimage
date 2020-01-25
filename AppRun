@@ -39,35 +39,43 @@ ln -s "$HERE" "$HERE_LINK"
 #===================================================================
 
 # If not extract and overwrite, $HERE/lib is a link to $HERE/usr/lib, that link to $HERE/usr/lib64
-export LD_LIBRARY_PATH="$HERE_LINK/usr/lib":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE_LINK/lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib32":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
+
+export PATH=$HERE/bin:$HERE/usr/bin:$PATH
 #------------------------------
 
 #Sound Library
-export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$HERE_LINK/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
 
 # libGL drivers
-export LIBGL_DRIVERS_PATH="$HERE_LINK/usr/lib32/dri":$LIBGL_DRIVERS_PATH
+export LIBGL_DRIVERS_PATH="$HERE/usr/lib32/dri":$LIBGL_DRIVERS_PATH
 
 #Font Config
-export FONTCONFIG_PATH="$HERE_LINK/etc/fonts":$FONTCONFIG_PATH
+export FONTCONFIG_PATH="$HERE/etc/fonts":$FONTCONFIG_PATH
 
 #LD
-export LIB32LDLIBRARY="$HERE_LINK/usr/lib32/ld-linux.so.2"
+export LIB32LDLIBRARY="$HERE/usr/lib32/ld-linux.so.2"
 #------------------------------
 
 # GStreamer environment variables
 export GST_REGISTRY_REUSE_PLUGIN_SCANNER="no"
-export GST_PLUGIN_SYSTEM_PATH_1_0="${HERE_LINK}/usr/lib32/gstreamer-1.0/"
+export GST_PLUGIN_SYSTEM_PATH_1_0="${HERE}/usr/lib32/gstreamer-1.0/"
 
-export GST_PLUGIN_SCANNER_1_0="${HERE_LINK}/usr/lib32/gstreamer-1.0/gst-plugin-scanner"
-export GST_PTP_HELPER_1_0="${HERE_LINK}/usr/lib32/gstreamer-1.0/gst-ptp-helper"
+export GST_PLUGIN_SCANNER_1_0="${HERE}/usr/lib32/gstreamer-1.0/gst-plugin-scanner"
+export GST_PTP_HELPER_1_0="${HERE}/usr/lib32/gstreamer-1.0/gst-ptp-helper"
 
 export GST_PLUGIN_PATH=${GST_PLUGIN_SYSTEM_PATH_1_0}
 export GST_PLUGIN_SYSTEM_PATH=${GST_PLUGIN_SYSTEM_PATH_1_0}
 export GST_PLUGIN_SCANNER=${GST_PLUGIN_SCANNER_1_0}
+#===================================================================
+
+# Gdk Pixbuf
+export GDK_PIXBUF_MODULE_FILE="${F11_APPIMAGE_TMP_DIR}/gdk_pixbuf_loaders.cache"
+export GDK_PIXBUF_MODULEDIR="${HERE}/usr/lib32/gdk-pixbuf-2.0/2.10.0/loaders"
+$LIB32LDLIBRARY "${HERE}/usr/bin/gdk-pixbuf-query-loaders-32" --update-cache
 #===================================================================
 
 # For Vulkan drivers:
@@ -121,14 +129,14 @@ else
 fi
 
 MAIN="$HERE_LINK/usr/bin/PCSX2"
-if [ -n "$1" ] && [ -x "$HERE_LINK/bin/$1" ] ; then
-	MAIN="$HERE_LINK/bin/$1" ; shift
-elif [ -n "$1" ] && [ -x "$HERE_LINK/usr/bin/$1" ] ; then
-	MAIN="$HERE_LINK/usr/bin/$1" ; shift
-elif [ -x "$HERE_LINK/bin/$BINARY_NAME" ] ; then
-	MAIN="$HERE_LINK/bin/$BINARY_NAME"
-elif [ -x "$HERE_LINK/usr/bin/$BINARY_NAME" ] ; then
-	MAIN="$HERE_LINK/usr/bin/$BINARY_NAME"
+if [ -n "$1" ] && [ -x "$HERE/bin/$1" ] ; then
+	MAIN="$HERE/bin/$1" ; shift
+elif [ -n "$1" ] && [ -x "$HERE/usr/bin/$1" ] ; then
+	MAIN="$HERE/usr/bin/$1" ; shift
+elif [ -x "$HERE/bin/$BINARY_NAME" ] ; then
+	MAIN="$HERE/bin/$BINARY_NAME"
+elif [ -x "$HERE/usr/bin/$BINARY_NAME" ] ; then
+	MAIN="$HERE/usr/bin/$BINARY_NAME"
 else
 	MAIN="$HERE_LINK/usr/bin/PCSX2"
 fi
@@ -139,7 +147,6 @@ if [ "$BINARY_NAME" = "ExternalExec" ] && [ -n "$1" ] && [ -x "$1" ]; then
 fi
 #===================================================================
 
-export PATH=$HERE_LINK/bin:$HERE_LINK/usr/bin:$PATH
 export __GL_THREADED_OPTIMIZATIONS=1
 $LIB32LDLIBRARY "$MAIN" "$@" | cat
 
