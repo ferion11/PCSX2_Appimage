@@ -34,9 +34,11 @@ get_archlinux32_pkgs() {
 	#https://mirror.datacenter.by/pub/archlinux32/$arch/$repo/"
 	
 	rm -rf tmp_pentium4_core_html
-	rm -rf tmp_pentium4_core_html
+	rm -rf tmp_pentium4_extra_html
+	rm -rf tmp_pentium4_community_html
 	wget -nv -c https://mirror.datacenter.by/pub/archlinux32/pentium4/core/ -O tmp_pentium4_core_html
 	wget -nv -c https://mirror.datacenter.by/pub/archlinux32/pentium4/extra/ -O tmp_pentium4_extra_html
+	wget -nv -c https://mirror.datacenter.by/pub/archlinux32/pentium4/community/ -O tmp_pentium4_community_html
 	
 	for current_pkg in "${@:2}"
 	do
@@ -54,13 +56,22 @@ get_archlinux32_pkgs() {
 				#echo "http://pool.mirror.archlinux32.org/pentium4/extra/$PKG_NAME_EXTRA"
 				get_archlinux32_pkg "http://pool.mirror.archlinux32.org/pentium4/extra/$PKG_NAME_EXTRA" $1
 			else
-				die "ERROR get_archlinux32_pkgs: Package don't found: $current_pkg"
+				PKG_NAME_COMMUNITY=$(grep "$current_pkg-[0-9]" tmp_pentium4_community_html | grep --invert-match ".sig" | sed -n 's/.*href="\([^"]*\).*/\1/p' | grep "^$current_pkg")
+				
+				if [ -n "$PKG_NAME_COMMUNITY" ]; then
+					#echo "COMMUNITY: Downloading $current_pkg in $1 : $PKG_NAME_COMMUNITY"
+					#echo "http://pool.mirror.archlinux32.org/pentium4/community/$PKG_NAME_COMMUNITY"
+					get_archlinux32_pkg "http://pool.mirror.archlinux32.org/pentium4/community/$PKG_NAME_COMMUNITY" $1
+				else
+					die "ERROR get_archlinux32_pkgs: Package don't found: $current_pkg"
+				fi
 			fi
 		fi
 	done
 	
 	rm -rf tmp_pentium4_core_html
 	rm -rf tmp_pentium4_extra_html
+	rm -rf tmp_pentium4_community_html
 }
 #=========================
 #Initializing the keyring requires entropy
@@ -125,6 +136,7 @@ echo "All files in ./cache: $(ls ./cache)"
 
 # Add the archlinux32 pentium4 packages (some deps):
 #get_archlinux32_pkgs ./cache/ gst-libav libwbclient tevent talloc ldb libbsd avahi libarchive smbclient libsoxr libssh vid.stab l-smash libtirpc
+get_archlinux32_pkgs ./cache/ gtk-engine-murrine
 #---------------------------------
 
 # extracting *tar.xz *tar.zst...
@@ -182,6 +194,11 @@ ln -s libva-x11.so libva-x11.so.1
 mv -n libva.so.1 usr/lib32
 mv -n libva-drm.so.1 usr/lib32
 mv -n libva-x11.so.1 usr/lib32
+#--------
+
+#gtk2 engine
+ln -s ../../../../lib/gtk-2.0/2.10.0/engines/libmurrine.so libmurrine.so
+mv libmurrine.so usr/lib32/gtk-2.0/2.10.0/engines/
 #===========================================================================================
 
 # Disable internal PulseAudio
