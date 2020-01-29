@@ -136,7 +136,7 @@ echo "All files in ./cache: $(ls ./cache)"
 
 # Add the archlinux32 pentium4 packages (some deps):
 #get_archlinux32_pkgs ./cache/ gst-libav libwbclient tevent talloc ldb libbsd avahi libarchive smbclient libsoxr libssh vid.stab l-smash libtirpc
-get_archlinux32_pkgs ./cache/ gtk-engine-murrine
+get_archlinux32_pkgs ./cache/ gtk-engines gtk-engine-murrine
 #---------------------------------
 
 # extracting *tar.xz *tar.zst...
@@ -185,9 +185,6 @@ mv -n libkeyutils.so usr/lib
 #--------
 
 # workaround some of libs
-ln -s libpcap.so libpcap.so.0.8
-mv -n libpcap.so.0.8 usr/lib32
-
 ln -s libva.so libva.so.1
 ln -s libva-drm.so libva-drm.so.1
 ln -s libva-x11.so libva-x11.so.1
@@ -196,9 +193,13 @@ mv -n libva-drm.so.1 usr/lib32
 mv -n libva-x11.so.1 usr/lib32
 #--------
 
-#gtk2 engine
-ln -s ../../../../lib/gtk-2.0/2.10.0/engines/libmurrine.so libmurrine.so
-mv libmurrine.so usr/lib32/gtk-2.0/2.10.0/engines/
+# Find and link all gtk2 engines:
+if [ -d "usr/lib/gtk-2.0/2.10.0/engines" ]; then
+	for lib_i in $(find "usr/lib/gtk-2.0/2.10.0/engines" -name *.so -exec basename {} \;); do
+		ln -s ../../../../lib/gtk-2.0/2.10.0/engines/"$lib_i" "$lib_i"
+		mv "$lib_i" usr/lib32/gtk-2.0/2.10.0/engines/
+	done
+fi
 
 #PCSX2 Langs
 ln -s ../share/locale Langs
