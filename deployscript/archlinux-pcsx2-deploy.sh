@@ -261,4 +261,4 @@ cd ..
 
 export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-1.4.0-*arch*.AppImage.zsync' pcsx2-1.4.0-${ARCH}.AppImage
 export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-1.4.0-*arch*.AppImage.zsync' pcsx2_NVIDIA-1.4.0-${ARCH}.AppImage
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_LEGACY_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA_LEGACY-1.4.0-*arch*.AppImage.zsync' pcsx2_NVIDIA_LEGACY-1.4.0-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_LEGACY_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-1.4.0-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-1.4.0-${ARCH}.AppImage
