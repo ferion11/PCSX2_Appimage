@@ -1,7 +1,6 @@
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
 PCSX2_HOME="$HOME/.config/PCSX2"
-HERE_LINK="$PCSX2_HOME/appimage_installation"
 F11_APPIMAGE_TMP_DIR="$HERE"_tmp
 F11_APPIMAGE_CONF_DIR="$HOME/.config/f11conf"
 F11_APPIMAGE_VKCONF="$F11_APPIMAGE_CONF_DIR/vulkan.conf"
@@ -30,12 +29,6 @@ if [ -d "$F11_APPIMAGE_TMP_DIR" ]; then
 	rm -rf "$F11_APPIMAGE_TMP_DIR"
 fi
 mkdir "$F11_APPIMAGE_TMP_DIR"
-#===================================================================
-
-#Using (and updating) links to plugin path
-make_dir "$PCSX2_HOME"
-rm -rf "$HERE_LINK"
-ln -s "$HERE" "$HERE_LINK"
 #===================================================================
 
 # If not extract and overwrite, $HERE/lib is a link to $HERE/usr/lib, that link to $HERE/usr/lib64
@@ -140,7 +133,7 @@ else
 	BINARY_NAME=$(basename "$0")
 fi
 
-MAIN="$HERE_LINK/usr/bin/PCSX2"
+MAIN="$HERE/usr/bin/PCSX2"
 if [ -n "$1" ] && [ -x "$HERE/bin/$1" ] ; then
 	MAIN="$HERE/bin/$1" ; shift
 elif [ -n "$1" ] && [ -x "$HERE/usr/bin/$1" ] ; then
@@ -150,7 +143,7 @@ elif [ -x "$HERE/bin/$BINARY_NAME" ] ; then
 elif [ -x "$HERE/usr/bin/$BINARY_NAME" ] ; then
 	MAIN="$HERE/usr/bin/$BINARY_NAME"
 else
-	MAIN="$HERE_LINK/usr/bin/PCSX2"
+	MAIN="$HERE/usr/bin/PCSX2"
 fi
 
 # Exec outside apps with inside environment (make the link name "ExternalExec")
@@ -159,9 +152,19 @@ if [ "$BINARY_NAME" = "ExternalExec" ] && [ -n "$1" ] && [ -x "$1" ]; then
 fi
 #===================================================================
 
+# Find and update PCSX2 paths:
+if [ "$MAIN" = "$HERE/usr/bin/PCSX2" ]; then
+	if [ -d "$PCSX2_HOME" ]; then
+		for dir_i in $(find "$PCSX2_HOME" -name *.ini); do
+			HERE_SLASH=$(echo "$HERE" | sed 's,/,\\\/,g')
+			sed -i "s/=[^[]*\/usr\/lib/=$HERE_SLASH\/usr\/lib/g" "$dir_i"
+		done
+	fi
+fi
+#===================================================================
+
 export __GL_THREADED_OPTIMIZATIONS=1
 $LIB32LDLIBRARY "$MAIN" "$@" | cat
-
 #===================================================================
 
 # clean tmp files:
