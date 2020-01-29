@@ -199,6 +199,10 @@ mv -n libva-x11.so.1 usr/lib32
 #gtk2 engine
 ln -s ../../../../lib/gtk-2.0/2.10.0/engines/libmurrine.so libmurrine.so
 mv libmurrine.so usr/lib32/gtk-2.0/2.10.0/engines/
+
+#PCSX2 Langs
+ln -s ../share/locale Langs
+mv Langs usr/lib32
 #===========================================================================================
 
 # Disable internal PulseAudio
