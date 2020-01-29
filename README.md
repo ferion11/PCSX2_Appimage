@@ -10,7 +10,7 @@ If you use the proprietary NVIDIA driver, you can download the respective versio
 #### 3- Run it:
 - `$ ./pcsx2-1.4.0-x86_64.AppImage`
 #### 4- To plugins work:
-- `Change the plugins default path to "$HOME/.config/PCSX2/appimage_installation/usr/lib32/pcsx2/"`
+- `Change the plugins default path to "/tmp/.mount_pcsx2-??????/usr/lib32/pcsx2/"`
 #### Optional 1- To test the OpenGL of your video card:
 - `$ ./pcsx2-1.4.0-x86_64.AppImage glxinfo32`
 - `$ ./pcsx2-1.4.0-x86_64.AppImage glxgears32 -info`
