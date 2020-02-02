@@ -266,7 +266,7 @@ rm -rf "$PKG_WORKDIR"
 cd "$PCSX2_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_WORKDIR"
 
 # Add a dependency library, such as freetype font library
-dependencys=$(pactree -s -u pcsx2 |grep lib32 | xargs)
+dependencys=$(pactree -s -u pcsx2-git |grep lib32 | xargs)
 
 mkdir cache
 
