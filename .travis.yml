@@ -18,12 +18,12 @@ after_success:
   - mkdir apps
 
   # archlinux
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2-1.4.0-x86_64.AppImage /tmp/apps
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2-1.4.0-x86_64.AppImage.zsync /tmp/apps
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA-1.4.0-x86_64.AppImage /tmp/apps
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA-1.4.0-x86_64.AppImage.zsync /tmp/apps
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA390xx-1.4.0-x86_64.AppImage /tmp/apps
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA390xx-1.4.0-x86_64.AppImage.zsync /tmp/apps
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2-1.5.0dev-x86_64.AppImage /tmp/apps
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2-1.5.0dev-x86_64.AppImage.zsync /tmp/apps
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA-1.5.0dev-x86_64.AppImage /tmp/apps
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA-1.5.0dev-x86_64.AppImage.zsync /tmp/apps
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA390xx-1.5.0dev-x86_64.AppImage /tmp/apps
+  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti pcsx2-appimage.archlinux cp pcsx2_NVIDIA390xx-1.5.0dev-x86_64.AppImage.zsync /tmp/apps
 
   # md5sum tool
   - wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
