@@ -257,7 +257,7 @@ mv *.pkg.tar ../ || die "ERROR: Can't create the pcsx2-git package"
 cd ..
 #------------------
 
-mv *.pkg.tar* ../"$PCSX2_WORKDIR"
+mv *.pkg.tar ../"$PCSX2_WORKDIR"
 
 cd ..
 rm -rf "$PKG_WORKDIR"
@@ -292,9 +292,9 @@ echo "All files in ./cache: $(ls ./cache)"
 get_archlinux32_pkgs ./cache/ gtk-engines gtk-engine-murrine
 #---------------------------------
 
-# extracting *tar.xz *tar.zst...
-find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./cache -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+# extracting *.pkg.tar.xz *.pkg.tar.zst...
+find ./cache -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./cache -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
 # Install vulkan tools:
 wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vkcube32
@@ -313,8 +313,7 @@ rm -rf usr/src; rm -rf usr/share; rm usr/sbin; rm -rf usr/local; rm usr/lib/{*.a
 #---------------------------------
 
 # Install pcsx2 after clean (to keep icons, themes...)
-find ./ -maxdepth 1 -mindepth 1 -name 'pcsx2*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./ -maxdepth 1 -mindepth 1 -name 'pcsx2*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name 'pcsx2*.pkg.tar' -exec tar --warning=no-unknown-keyword -xf {} \;
 rm ./pcsx2*
 #===========================================================================================
 
@@ -385,8 +384,8 @@ rm -rf usr/lib32/dri/nouveau*
 rm -rf usr/lib32/libdrm_nouveau*
 
 # extracting *tar.xz and *tar.zst
-find ./ -maxdepth 1 -mindepth 1 -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./ -maxdepth 1 -mindepth 1 -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
 rm -rf lib32-nvidia-utils*
 cd ..
@@ -402,9 +401,9 @@ mv ../lib32-nvidia-390xx-utils* ./
 rm -rf usr/lib32/dri/nouveau*
 rm -rf usr/lib32/libdrm_nouveau*
 
-# extracting *tar.xz *tar.zst...
-find ./ -maxdepth 1 -mindepth 1 -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./ -maxdepth 1 -mindepth 1 -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+# extracting *.pkg.tar.xz *.pkg.tar.zst...
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
 rm -rf lib32-nvidia-390xx-utils*
 cd ..
@@ -420,9 +419,8 @@ mv ../lib32-nvidia-340xx-utils* ./
 rm -rf usr/lib32/dri/nouveau*
 rm -rf usr/lib32/libdrm_nouveau*
 
-# extracting *tar.xz *tar.zst...
-find ./ -maxdepth 1 -mindepth 1 -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./ -maxdepth 1 -mindepth 1 -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+# extracting *.pkg.tar ...
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar' -exec tar --warning=no-unknown-keyword -xf {} \;
 
 rm -rf lib32-nvidia-340xx-utils*
 cd ..
