@@ -157,7 +157,7 @@ sudo -u nobody cat > "./pcsx2-git/PKGBUILD" << EOF
 # Contributor: Themaister <maister@archlinux.us>
 
 pkgname=pcsx2-git
-pkgver=1.5.0.r3365-g8550cb9b1
+pkgver=1.5.0.r3365.g8550cb9b1
 pkgrel=1
 pkgdesc='A Sony PlayStation 2 emulator'
 arch=(x86_64)
