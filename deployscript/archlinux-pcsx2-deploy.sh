@@ -139,17 +139,6 @@ chown nobody.nobody "$PKG_WORKDIR"
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #------------------
 
-# Dep compile/install sample:
-# libcpuid-git  https://aur.archlinux.org/packages/libcpuid-git/
-#sudo -u nobody git clone https://aur.archlinux.org/libcpuid-git.git
-#cd libcpuid-git
-#sudo -u nobody makepkg --syncdeps --noconfirm
-#echo "* All files HERE: $(ls ./)"
-#pacman --noconfirm -U ./*.pkg.tar*
-#mv *.pkg.tar* ../ || die "ERROR: Can't create the libcpuid-git package"
-#cd ..
-#------------------
-
 ## lib32-nvidia-340xx-utils from https://aur.archlinux.org/packages/lib32-nvidia-340xx-utils/
 #sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-340xx-utils.git
 #cd  lib32-nvidia-340xx-utils
@@ -249,6 +238,7 @@ package() {
 # vim: ts=2 sw=2 et:
 
 EOF
+sudo -u nobody chmod a+rw "./pcsx2-git/PKGBUILD"
 
 #-------
 cd pcsx2-git
