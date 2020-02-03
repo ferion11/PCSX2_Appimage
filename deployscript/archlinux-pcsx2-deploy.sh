@@ -199,7 +199,7 @@ pkgver() {
 }
 
 prepare() {
-  patch -s -p0 < evar.patch
+  patch -s -p0 < "${srcdir}/evar.patch"
 
   if [[ -d build ]]; then
     rm -rf build
