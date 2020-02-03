@@ -131,6 +131,11 @@ EOF
 fi
 #===================================================================
 
+export PCSX2_PLUGIN_DIR="$HERE/usr/lib32/pcsx2"
+export PCSX2_GAMEINDEX_DIR="$HERE/usr/share/pcsx2"
+export PCSX2_DOC_DIR="$HERE/usr/share/doc/PCSX2"
+#----------------------------------------
+
 # Allow the AppImage to be symlinked to e.g., /usr/bin/glxinfo32 or /usr/bin/glxgears32
 if [ -n "$APPIMAGE" ] ; then
 	BINARY_NAME=$(basename "$ARGV0")

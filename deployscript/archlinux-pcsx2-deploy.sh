@@ -200,7 +200,8 @@ makedepends=(
 )
 provides=(pcsx2)
 conflicts=(pcsx2)
-source=(git+https://github.com/PCSX2/pcsx2.git)
+#source=(git+https://github.com/PCSX2/pcsx2.git)
+source=(git+https://github.com/ferion11/pcsx2.git)
 sha256sums=(SKIP)
 
 pkgver() {
