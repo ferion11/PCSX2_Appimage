@@ -37,13 +37,16 @@ export LD_LIBRARY_PATH="$HERE/usr/lib32":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
 
 export PATH=$HERE/bin:$HERE/usr/bin:$PATH
-#------------------------------
+#----------------------------------------
 
 #Sound Library
 export LD_LIBRARY_PATH="$HERE/usr/lib32/pulseaudio":$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HERE/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
 export LADSPA_PATH="$HERE/usr/lib32/ladspa":$LADSPA_PATH
 export AO_PLUGIN_PATH="$HERE/usr/lib32/ao/plugins-4":$AO_PLUGIN_PATH
+
+# For mpg123
+export LD_LIBRARY_PATH="$HERE/usr/lib32/mpg123":$LD_LIBRARY_PATH
 
 # for libomxil-bellagio
 export BELLAGIO_SEARCH_PATH="$HERE/usr/lib32/bellagio":"$HERE/usr/lib32/omxloaders":"$HERE/usr/lib32"
