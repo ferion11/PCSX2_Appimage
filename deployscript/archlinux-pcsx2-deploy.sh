@@ -157,7 +157,7 @@ sudo -u nobody cat > "./pcsx2-git/PKGBUILD" << EOF
 # Contributor: Themaister <maister@archlinux.us>
 
 pkgname=pcsx2-git
-pkgver=1.5.0dev
+pkgver=1.5.0.r3365.8550cb9b1
 pkgrel=1
 pkgdesc='A Sony PlayStation 2 emulator'
 arch=(x86_64)
@@ -189,8 +189,7 @@ makedepends=(
 )
 provides=(pcsx2)
 conflicts=(pcsx2)
-#source=(git+https://github.com/PCSX2/pcsx2.git)
-source=(git+https://github.com/ferion11/pcsx2.git)
+source=(git+https://github.com/PCSX2/pcsx2.git)
 sha256sums=(SKIP)
 
 pkgver() {
@@ -200,6 +199,8 @@ pkgver() {
 }
 
 prepare() {
+  patch -s -p0 < evar.patch
+
   if [[ -d build ]]; then
     rm -rf build
   fi
@@ -239,6 +240,59 @@ package() {
 
 EOF
 sudo -u nobody chmod a+rw "./pcsx2-git/PKGBUILD"
+
+sudo -u nobody cat > "./pcsx2-git/evar.patch" << EOF
+diff -rcN pcsx2/pcsx2/gui/AppConfig.cpp pcsx2_new/pcsx2/gui/AppConfig.cpp
+*** pcsx2/pcsx2/gui/AppConfig.cpp	2020-02-03 19:57:57.136248105 -0300
+--- pcsx2_new/pcsx2/gui/AppConfig.cpp	2020-02-03 18:43:00.000000000 -0300
+***************
+*** 173,178 ****
+--- 173,180 ----
+  
+  	wxDirName GetProgramDataDir()
+  	{
++ 		char * evar_curr = getenv( "PCSX2_GAMEINDEX_DIR" );
++ 		if ( evar_curr != NULL ) return wxDirName( evar_curr );
+  #ifndef GAMEINDEX_DIR_COMPILATION
+  		return AppRoot();
+  #else
+***************
+*** 221,226 ****
+--- 223,230 ----
+  
+  	wxDirName GetPlugins()
+  	{
++ 		char * evar_curr = getenv( "PCSX2_PLUGIN_DIR" );
++ 		if ( evar_curr != NULL ) return wxDirName( evar_curr );
+  		// Each linux distributions have his rules for path so we give them the possibility to
+  		// change it with compilation flags. -- Gregory
+  #ifndef PLUGIN_DIR_COMPILATION
+diff -rcN pcsx2/pcsx2/gui/Dialogs/FirstTimeWizard.cpp pcsx2_new/pcsx2/gui/Dialogs/FirstTimeWizard.cpp
+*** pcsx2/pcsx2/gui/Dialogs/FirstTimeWizard.cpp	2020-02-03 19:57:57.144248105 -0300
+--- pcsx2_new/pcsx2/gui/Dialogs/FirstTimeWizard.cpp	2020-02-03 18:43:16.000000000 -0300
+***************
+*** 71,76 ****
+--- 71,79 ----
+  	SetMinWidth( MSW_GetDPIScale() * 600 );
+  
+  	FastFormatUnicode faqFile;
++ 	char * evar_curr = getenv( "PCSX2_DOC_DIR" );
++ 	if ( evar_curr != NULL ) faqFile.Write( L"file://%s/PCSX2_FAQ.pdf", WX_STR(std::string(evar_curr)) );
++ 	else {
+  #ifndef DOC_DIR_COMPILATION
+  	faqFile.Write( L"file:///%s/Docs/PCSX2_FAQ.pdf", WX_STR(InstallFolder.ToString()) );
+  #else
+***************
+*** 80,85 ****
+--- 83,89 ----
+  #define DOC_str(s) #s
+  	faqFile.Write( L"file://%s/PCSX2_FAQ.pdf", WX_STR(wxDirName(xDOC_str(DOC_DIR_COMPILATION)).ToString()) );
+  #endif
++ 	}
+  
+  	wxStaticBoxSizer& langSel	= *new wxStaticBoxSizer( wxVERTICAL, this, _("Language selector") );
+  
+EOF
 
 #-------
 cd pcsx2-git
