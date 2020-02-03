@@ -200,8 +200,8 @@ makedepends=(
 )
 provides=(pcsx2)
 conflicts=(pcsx2)
-#source=(git+https://github.com/PCSX2/pcsx2.git)
-source=(git+https://github.com/ferion11/pcsx2.git)
+source=(git+https://github.com/PCSX2/pcsx2.git)
+#source=(git+https://github.com/ferion11/pcsx2.git)
 sha256sums=(SKIP)
 
 pkgver() {
@@ -232,7 +232,11 @@ build() {
     -DCMAKE_INSTALL_PREFIX=/usr \\
     -DCMAKE_LIBRARY_PATH=/usr/lib32 \\
     -DPLUGIN_DIR=/usr/lib32/pcsx2 \\
+    -DPLUGIN_DIR_COMPILATION=pcsx2 \\
     -DGAMEINDEX_DIR=/usr/share/pcsx2 \\
+    -DGAMEINDEX_DIR_COMPILATION=pcsx2 \\
+    -DDOC_DIR=/usr/share/doc/PCSX2 \\
+    -DDOC_DIR_COMPILATION=pcsx2 \\
     -DEXTRA_PLUGINS=ON \\
     -DREBUILD_SHADER=ON \\
     -DGLSL_API=ON \\
