@@ -139,13 +139,13 @@ chown nobody.nobody "$PKG_WORKDIR"
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #------------------
 
-## lib32-nvidia-340xx-utils from https://aur.archlinux.org/packages/lib32-nvidia-340xx-utils/
-#sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-340xx-utils.git
-#cd  lib32-nvidia-340xx-utils
-#sudo -u nobody makepkg --syncdeps --noconfirm
-#echo "* All files HERE: $(ls ./)"
-#mv lib32-nvidia-340xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-nvidia-340xx-utils package"
-#cd ..
+# lib32-nvidia-340xx-utils from https://aur.archlinux.org/packages/lib32-nvidia-340xx-utils/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-340xx-utils.git
+cd  lib32-nvidia-340xx-utils
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv lib32-nvidia-340xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-nvidia-340xx-utils package"
+cd ..
 #------------------
 
 # pcsx2-git  https://aur.archlinux.org/packages/pcsx2-git/
@@ -417,64 +417,64 @@ chmod +x AppRun
 cp AppRun $PCSX2_WORKDIR
 cp resource/* $PCSX2_WORKDIR
 #===========================================================================================
-#
-## Nvidia variation with lib32-nvidia-utils:
-#PCSX2_NVIDIA_WORKDIR="pcsx2_nvidia_version"
-#cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_WORKDIR"
-#cd "$PCSX2_NVIDIA_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_WORKDIR"
-#mv ../lib32-nvidia-utils* ./
-#
-## Remove opensource nouveau:
-#rm -rf usr/lib32/dri/nouveau*
-#rm -rf usr/lib32/libdrm_nouveau*
-#
-## extracting *tar.xz and *tar.zst
-#find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-#find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
-#
-#rm -rf lib32-nvidia-utils*
-#cd ..
+
+# Nvidia variation with lib32-nvidia-utils:
+PCSX2_NVIDIA_WORKDIR="pcsx2_nvidia_version"
+cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_WORKDIR"
+cd "$PCSX2_NVIDIA_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_WORKDIR"
+mv ../lib32-nvidia-utils* ./
+
+# Remove opensource nouveau:
+rm -rf usr/lib32/dri/nouveau*
+rm -rf usr/lib32/libdrm_nouveau*
+
+# extracting *tar.xz and *tar.zst
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+
+rm -rf lib32-nvidia-utils*
+cd ..
 #===========================================================================================
-#
-## Nvidia Legacy variation with lib32-nvidia-390xx-utils:
-#PCSX2_NVIDIA_390xx_WORKDIR="pcsx2_nvidia_390xx_version"
-#cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_390xx_WORKDIR"
-#cd "$PCSX2_NVIDIA_390xx_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_390xx_WORKDIR"
-#mv ../lib32-nvidia-390xx-utils* ./
-#
-## Remove opensource nouveau:
-#rm -rf usr/lib32/dri/nouveau*
-#rm -rf usr/lib32/libdrm_nouveau*
-#
-## extracting *.pkg.tar.xz *.pkg.tar.zst...
-#find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-#find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
-#
-#rm -rf lib32-nvidia-390xx-utils*
-#cd ..
+
+# Nvidia Legacy variation with lib32-nvidia-390xx-utils:
+PCSX2_NVIDIA_390xx_WORKDIR="pcsx2_nvidia_390xx_version"
+cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_390xx_WORKDIR"
+cd "$PCSX2_NVIDIA_390xx_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_390xx_WORKDIR"
+mv ../lib32-nvidia-390xx-utils* ./
+
+# Remove opensource nouveau:
+rm -rf usr/lib32/dri/nouveau*
+rm -rf usr/lib32/libdrm_nouveau*
+
+# extracting *.pkg.tar.xz *.pkg.tar.zst...
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+
+rm -rf lib32-nvidia-390xx-utils*
+cd ..
 #===========================================================================================
-#
-## Nvidia Legacy variation with lib32-nvidia-340xx-utils:
-#PCSX2_NVIDIA_340xx_WORKDIR="pcsx2_nvidia_340xx_version"
-#cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_340xx_WORKDIR"
-#cd "$PCSX2_NVIDIA_340xx_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_340xx_WORKDIR"
-#mv ../lib32-nvidia-340xx-utils* ./
-#
-## Remove opensource nouveau:
-#rm -rf usr/lib32/dri/nouveau*
-#rm -rf usr/lib32/libdrm_nouveau*
-#
-## extracting *.pkg.tar ...
-#find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar' -exec tar --warning=no-unknown-keyword -xf {} \;
-#
-#rm -rf lib32-nvidia-340xx-utils*
-#cd ..
+
+# Nvidia Legacy variation with lib32-nvidia-340xx-utils:
+PCSX2_NVIDIA_340xx_WORKDIR="pcsx2_nvidia_340xx_version"
+cp -rp "$PCSX2_WORKDIR" "$PCSX2_NVIDIA_340xx_WORKDIR"
+cd "$PCSX2_NVIDIA_340xx_WORKDIR" || die "ERROR: Directory don't exist: $PCSX2_NVIDIA_340xx_WORKDIR"
+mv ../lib32-nvidia-340xx-utils* ./
+
+# Remove opensource nouveau:
+rm -rf usr/lib32/dri/nouveau*
+rm -rf usr/lib32/libdrm_nouveau*
+
+# extracting *.pkg.tar ...
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar' -exec tar --warning=no-unknown-keyword -xf {} \;
+
+rm -rf lib32-nvidia-340xx-utils*
+cd ..
 #===========================================================================================
 
 # AppImage generation:
 ./appimagetool.AppImage --appimage-extract
 
 export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-1.5.0dev-*arch*.AppImage.zsync' pcsx2-1.5.0dev-${ARCH}.AppImage
-#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA-1.5.0dev-${ARCH}.AppImage
-#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-1.5.0dev-${ARCH}.AppImage
-#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-1.5.0dev-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA-1.5.0dev-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-1.5.0dev-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-1.5.0dev-${ARCH}.AppImage
