@@ -199,11 +199,7 @@ pkgver() {
 }
 
 prepare() {
-  echo "AQUI EH:"
-  pwd
-  echo "AQUI TEM:"
-  ls
-  patch -p0 < evar.patch
+  patch -p0 < /tmp/evar.patch
 
   if [[ -d build ]]; then
     rm -rf build
@@ -245,7 +241,7 @@ package() {
 EOF
 sudo -u nobody chmod a+rw "./pcsx2-git/PKGBUILD"
 
-sudo -u nobody cat > "./pcsx2-git/evar.patch" << EOF
+sudo -u nobody cat > "/tmp/evar.patch" << EOF
 diff -rcN pcsx2/pcsx2/gui/AppConfig.cpp pcsx2_new/pcsx2/gui/AppConfig.cpp
 *** pcsx2/pcsx2/gui/AppConfig.cpp	2020-02-03 19:57:57.136248105 -0300
 --- pcsx2_new/pcsx2/gui/AppConfig.cpp	2020-02-03 18:43:00.000000000 -0300
