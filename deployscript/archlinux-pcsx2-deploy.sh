@@ -199,7 +199,11 @@ pkgver() {
 }
 
 prepare() {
-  patch -p0 < "${srcdir}/${pkgname}-${pkgver}/evar.patch"
+  echo "AQUI EH:"
+  pwd
+  echo "AQUI TEM:"
+  ls
+  patch -p0 < evar.patch
 
   if [[ -d build ]]; then
     rm -rf build
