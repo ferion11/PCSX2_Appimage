@@ -157,7 +157,7 @@ sudo -u nobody cat > "./pcsx2-git/PKGBUILD" << EOF
 # Contributor: Themaister <maister@archlinux.us>
 
 pkgname=pcsx2-git
-pkgver=1.5.0.r3365.8550cb9b1
+pkgver=1.5.0.r3370.c0eb05386
 pkgrel=1
 pkgdesc='A Sony PlayStation 2 emulator'
 arch=(x86_64)
@@ -199,6 +199,7 @@ pkgver() {
 }
 
 prepare() {
+  chmod a+rw /srv/pcsx2appimage/pkg_work/pcsx2-git/PKGBUILD
   patch -p0 < /tmp/evar.patch
 
   if [[ -d build ]]; then
