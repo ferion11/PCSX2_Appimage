@@ -199,7 +199,6 @@ pkgver() {
 }
 
 prepare() {
-  chmod a+rw /srv/pcsx2appimage/pkg_work/pcsx2-git/PKGBUILD
   patch -p0 < /tmp/evar.patch
 
   if [[ -d build ]]; then
