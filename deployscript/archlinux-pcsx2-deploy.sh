@@ -350,7 +350,7 @@ dependencys=$(pactree -s -u pcsx2-git |grep lib32 | xargs)
 mkdir cache
 
 pacman -Scc --noconfirm
-pacman -Syw --noconfirm --cachedir cache lib32-nvidia-utils lib32-nvidia-390xx-utils lib32-alsa-lib lib32-alsa-plugins lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-openal lib32-sdl2 lib32-libdrm lib32-libva lib32-portaudio lib32-sdl2 lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-virtualgl lib32-ladspa lib32-libao lib32-libpulse lib32-libcanberra-pulse lib32-glew lib32-mesa-demos lib32-libxinerama lib32-vulkan-icd-loader lib32-vulkan-intel lib32-vulkan-radeon lib32-gtk2 lib32-wxgtk2 $dependencys || die "ERROR: Some packages not found!!!"
+pacman -Syw --noconfirm --cachedir cache lib32-nvidia-utils lib32-nvidia-390xx-utils lib32-alsa-lib lib32-alsa-plugins lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-sdl2 lib32-libdrm lib32-libva lib32-portaudio lib32-sdl2 lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-ladspa lib32-libao lib32-libpulse lib32-libcanberra-pulse lib32-glew lib32-mesa-demos lib32-libxinerama lib32-gtk2 lib32-wxgtk2 $dependencys || die "ERROR: Some packages not found!!!"
 #---------------------------------
 
 #Save nvidia packages for later
@@ -364,6 +364,11 @@ mv ./lib32-nvidia-340xx-utils* ../
 find ./cache -type f ! -name "lib32*" -exec rm {} \; -exec echo "Removing: {}" \;
 #find ./cache -type f -name "*x86_64*" -exec rm {} \; -exec echo "Removing: {}" \; #don't work because the name of lib32 multilib packages have the x86_64 too
 #mv ./pcsx2* ./cache/
+echo "DEBUG: clean some packages"
+rm -rf ./cache/lib32-clang*
+rm -rf ./cache/lib32-nvidia-cg-toolkit*
+rm -rf ./cache/lib32-ocl-icd*
+rm -rf ./cache/lib32-opencl-mesa*
 echo "All files in ./cache: $(ls ./cache)"
 
 # Add the archlinux32 pentium4 packages (some deps):
@@ -375,14 +380,14 @@ get_archlinux32_pkgs ./cache/ gtk-engines gtk-engine-murrine
 find ./cache -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
 find ./cache -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
-# Install vulkan tools:
-wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vkcube32
-wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vkcubepp32
-wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vulkaninfo32
-chmod +x vkcube32 vkcubepp32 vulkaninfo32
-mv -n vkcube32 usr/bin
-mv -n vkcubepp32 usr/bin
-mv -n vulkaninfo32 usr/bin
+## Install vulkan tools:
+#wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vkcube32
+#wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vkcubepp32
+#wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vulkaninfo32
+#chmod +x vkcube32 vkcubepp32 vulkaninfo32
+#mv -n vkcube32 usr/bin
+#mv -n vkcubepp32 usr/bin
+#mv -n vulkaninfo32 usr/bin
 #----------------------------------------------
 
 # PCSX2_WORKDIR cleanup
