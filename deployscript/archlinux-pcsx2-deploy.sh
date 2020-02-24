@@ -75,6 +75,7 @@ get_archlinux32_pkgs() {
 	rm -rf tmp_pentium4_community_html
 }
 #=========================
+echo "DEBUG: starting and configuring pacmam"
 # pacman-key: need it
 #pacman -S --noconfirm gawk
 
@@ -117,13 +118,18 @@ echo "" >> /etc/pacman.conf
 #pacman-key --keyserver keys.mozilla.org -r 3056513887B78AEB
 #pacman-key --lsign-key 3056513887B78AEB
 
+echo "DEBUG: updating pacmam keys"
 pacman -Syy && pacman -S archlinuxcn-keyring
 
+echo "DEBUG: pacmam sync"
 pacman -Syy
+
+echo "DEBUG: pacmam install basic tools"
 #Add "gcc lib32-gcc-libs" for compile in the list:
 pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep zstd xz
 #===========================================================================================
 
+echo "DEBUG: git-describe-remote.sh getting info"
 cat > "git-describe-remote.sh" << EOF
 #!/usr/bin/awk -f
 BEGIN {
@@ -153,9 +159,16 @@ ARCHV=$(echo $FULL | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
 VERSION=$(echo $FULL | cut -d- -f1)
 RELEASE=$(echo $FULL | cut -d- -f3)
 
+echo "=== VERSIONS ==="
+echo "FULL: $FULL"
+echo "ARCHV: $ARCHV"
+echo "VERSION: $VERSION"
+echo "RELEASE: $RELEASE"
+
 rm -rf git-describe-remote.sh
 #===========================================================================================
 
+echo "DEBUG: making packages"
 # Get pcsx2-git
 # using the package
 mkdir "$PCSX2_WORKDIR"
@@ -170,6 +183,8 @@ printf 'nobody ALL=(ALL) ALL\n' | tee -a /etc/sudoers
 # change workind dir to nobody own:
 chown nobody.nobody "$PKG_WORKDIR"
 #===========================================================================================
+
+echo "DEBUG: making nvidia old package"
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #------------------
@@ -183,6 +198,7 @@ mv lib32-nvidia-340xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-n
 cd ..
 #------------------
 
+echo "DEBUG: making pcsx2 package"
 # pcsx2-git  https://aur.archlinux.org/packages/pcsx2-git/
 #sudo -u nobody git clone https://aur.archlinux.org/pcsx2-git.git
 sudo -u nobody mkdir pcsx2-git
@@ -275,7 +291,9 @@ package() {
 
 EOF
 sudo -u nobody chmod a+rw "./pcsx2-git/PKGBUILD"
-
+echo "DEBUG: cat the PKGBUILD ========================"
+cat "./pcsx2-git/PKGBUILD"
+echo "================================================"
 sudo -u nobody cat > "/tmp/evar.patch" << EOF
 diff -rcN pcsx2/pcsx2/gui/AppConfig.cpp pcsx2_new/pcsx2/gui/AppConfig.cpp
 *** pcsx2/pcsx2/gui/AppConfig.cpp	2020-02-03 19:57:57.136248105 -0300
