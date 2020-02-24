@@ -121,6 +121,38 @@ pacman -Syy
 pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz
 #===========================================================================================
 
+cat > "git-describe-remote.sh" << EOF
+#!/usr/bin/awk -f
+BEGIN {
+  if (ARGC != 2) {
+    print "git-describe-remote.awk https://github.com/stedolan/jq"
+    exit
+  }
+  FS = "[ /^]+"
+  while ("git ls-remote " ARGV[1] "| sort -Vk2" | getline) {
+    if (!sha)
+      sha = substr($0, 1, 9)
+    tag = $3
+  }
+  while ("curl -s " ARGV[1] "/releases/tag/" tag | getline)
+    if ($3 ~ "commits")
+      com = $2
+  printf com ? "%s-%s-g%s\n" : "%s\n", tag, com, sha
+}
+
+EOF
+chmod +x git-describe-remote.sh
+
+FULL=$(./git-describe-remote.sh https://github.com/PCSX2/pcsx2)
+
+ARCHV=$(echo $FULL_VERSION_NORM | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
+
+VERSION=$(echo $FULL | cut -d- -f1)
+RELEASE=$(echo $FULL | cut -d- -f3)
+
+rm -rf git-describe-remote.sh
+#===========================================================================================
+
 # Get pcsx2-git
 # using the package
 mkdir "$PCSX2_WORKDIR"
@@ -157,7 +189,7 @@ sudo -u nobody cat > "./pcsx2-git/PKGBUILD" << EOF
 # Contributor: Themaister <maister@archlinux.us>
 
 pkgname=pcsx2-git
-pkgver=1.5.0.r3370.c0eb05386
+pkgver=$ARCHV
 pkgrel=1
 pkgdesc='A Sony PlayStation 2 emulator'
 arch=(x86_64)
@@ -474,7 +506,12 @@ cd ..
 # AppImage generation:
 ./appimagetool.AppImage --appimage-extract
 
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-1.5.0dev-*arch*.AppImage.zsync' pcsx2-1.5.0dev-${ARCH}.AppImage
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA-1.5.0dev-${ARCH}.AppImage
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-1.5.0dev-${ARCH}.AppImage
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-1.5.0dev-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-1.5.0dev-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-$VERSIONdev_r$RELEASE-*arch*.AppImage.zsync' pcsx2-$VERSIONdev_r$RELEASE-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-$VERSIONdev_r$RELEASE-*arch*.AppImage.zsync' pcsx2_NVIDIA-$VERSIONdev_r$RELEASE-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-$VERSIONdev_r$RELEASE-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-$VERSIONdev_r$RELEASE-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-$VERSIONdev_r$RELEASE-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-$VERSIONdev_r$RELEASE-${ARCH}.AppImage
+
+echo "Packing tar result file..."
+rm -rf appimagetool.AppImage
+tar cvf result.tar *.AppImage *.zsync
+echo "* result.tar size: $(du -hs result.tar)"
