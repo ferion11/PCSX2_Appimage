@@ -161,6 +161,7 @@ ARCHV=$(echo $FULL | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
 
 VERSION=$(echo $FULL | cut -d- -f1)
 RELEASE=$(echo $FULL | cut -d- -f3)
+GITHASH=$(echo $FULL | cut -d- -f4)
 
 echo "=== VERSIONS ==="
 echo "FULL: $FULL"
