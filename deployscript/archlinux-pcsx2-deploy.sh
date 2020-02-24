@@ -76,7 +76,7 @@ get_archlinux32_pkgs() {
 }
 #=========================
 # pacman-key: need it
-pacman -S --noconfirm gawk
+#pacman -S --noconfirm gawk
 
 #Initializing the keyring requires entropy
 pacman-key --init
