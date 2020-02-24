@@ -431,9 +431,6 @@ if [ -d "usr/lib/gtk-2.0/2.10.0/engines" ]; then
 	done
 fi
 
-#PCSX2 Langs
-ln -s ../share/locale Langs
-mv Langs usr/lib32
 #===========================================================================================
 
 # Disable internal PulseAudio
