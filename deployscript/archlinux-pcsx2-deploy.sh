@@ -118,6 +118,9 @@ echo "" >> /etc/pacman.conf
 #pacman-key --keyserver keys.mozilla.org -r 3056513887B78AEB
 #pacman-key --lsign-key 3056513887B78AEB
 
+# workaround one bug: https://bugzilla.redhat.com/show_bug.cgi?id=1773148
+echo "Set disable_coredump false" >> /etc/sudo.conf
+
 echo "DEBUG: updating pacmam keys"
 pacman -Syy && pacman -S archlinuxcn-keyring
 
@@ -169,6 +172,7 @@ rm -rf git-describe-remote.sh
 #===========================================================================================
 
 echo "DEBUG: making packages"
+
 # Get pcsx2-git
 # using the package
 mkdir "$PCSX2_WORKDIR"
@@ -291,13 +295,13 @@ package() {
 
 EOF
 sudo -u nobody chmod a+rw "./pcsx2-git/PKGBUILD"
-echo "DEBUG: cat the PKGBUILD ========================"
-cat "./pcsx2-git/PKGBUILD"
+
+
 echo "================================================"
 sudo -u nobody cat > "/tmp/evar.patch" << EOF
 diff -rcN pcsx2/pcsx2/gui/AppConfig.cpp pcsx2_new/pcsx2/gui/AppConfig.cpp
-*** pcsx2/pcsx2/gui/AppConfig.cpp	2020-02-03 19:57:57.136248105 -0300
---- pcsx2_new/pcsx2/gui/AppConfig.cpp	2020-02-03 18:43:00.000000000 -0300
+*** pcsx2/pcsx2/gui/AppConfig.cpp	2020-02-23 23:38:36.939457634 -0300
+--- pcsx2_new/pcsx2/gui/AppConfig.cpp	2020-02-23 23:31:34.209485289 -0300
 ***************
 *** 173,178 ****
 --- 173,180 ----
@@ -320,31 +324,7 @@ diff -rcN pcsx2/pcsx2/gui/AppConfig.cpp pcsx2_new/pcsx2/gui/AppConfig.cpp
   		// Each linux distributions have his rules for path so we give them the possibility to
   		// change it with compilation flags. -- Gregory
   #ifndef PLUGIN_DIR_COMPILATION
-diff -rcN pcsx2/pcsx2/gui/Dialogs/FirstTimeWizard.cpp pcsx2_new/pcsx2/gui/Dialogs/FirstTimeWizard.cpp
-*** pcsx2/pcsx2/gui/Dialogs/FirstTimeWizard.cpp	2020-02-03 19:57:57.144248105 -0300
---- pcsx2_new/pcsx2/gui/Dialogs/FirstTimeWizard.cpp	2020-02-03 18:43:16.000000000 -0300
-***************
-*** 71,76 ****
---- 71,79 ----
-  	SetMinWidth( MSW_GetDPIScale() * 600 );
-  
-  	FastFormatUnicode faqFile;
-+ 	char * evar_curr = getenv( "PCSX2_DOC_DIR" );
-+ 	if ( evar_curr != NULL ) faqFile.Write( L"file://%s/PCSX2_FAQ.pdf", WX_STR(std::string(evar_curr)) );
-+ 	else {
-  #ifndef DOC_DIR_COMPILATION
-  	faqFile.Write( L"file:///%s/Docs/PCSX2_FAQ.pdf", WX_STR(InstallFolder.ToString()) );
-  #else
-***************
-*** 80,85 ****
---- 83,89 ----
-  #define DOC_str(s) #s
-  	faqFile.Write( L"file://%s/PCSX2_FAQ.pdf", WX_STR(wxDirName(xDOC_str(DOC_DIR_COMPILATION)).ToString()) );
-  #endif
-+ 	}
-  
-  	wxStaticBoxSizer& langSel	= *new wxStaticBoxSizer( wxVERTICAL, this, _("Language selector") );
-  
+
 EOF
 
 #-------
