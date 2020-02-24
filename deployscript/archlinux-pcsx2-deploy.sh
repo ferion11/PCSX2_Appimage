@@ -75,6 +75,9 @@ get_archlinux32_pkgs() {
 	rm -rf tmp_pentium4_community_html
 }
 #=========================
+# pacman-key: need it
+pacman -S --noconfirm gawk
+
 #Initializing the keyring requires entropy
 pacman-key --init
 
@@ -118,7 +121,7 @@ pacman -Syy && pacman -S archlinuxcn-keyring
 
 pacman -Syy
 #Add "gcc lib32-gcc-libs" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep zstd xz
 #===========================================================================================
 
 cat > "git-describe-remote.sh" << EOF
@@ -131,12 +134,12 @@ BEGIN {
   FS = "[ /^]+"
   while ("git ls-remote " ARGV[1] "| sort -Vk2" | getline) {
     if (!sha)
-      sha = substr($0, 1, 9)
-    tag = $3
+      sha = substr(\$0, 1, 9)
+    tag = \$3
   }
   while ("curl -s " ARGV[1] "/releases/tag/" tag | getline)
-    if ($3 ~ "commits")
-      com = $2
+    if (\$3 ~ "commits")
+      com = \$2
   printf com ? "%s-%s-g%s\n" : "%s\n", tag, com, sha
 }
 
@@ -145,7 +148,7 @@ chmod +x git-describe-remote.sh
 
 FULL=$(./git-describe-remote.sh https://github.com/PCSX2/pcsx2)
 
-ARCHV=$(echo $FULL_VERSION_NORM | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
+ARCHV=$(echo $FULL | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
 
 VERSION=$(echo $FULL | cut -d- -f1)
 RELEASE=$(echo $FULL | cut -d- -f3)
