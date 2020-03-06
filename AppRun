@@ -174,7 +174,7 @@ fi
 # Find and update PCSX2 paths:
 if [ "$MAIN" = "$HERE/usr/bin/PCSX2" ]; then
 	if [ -d "$PCSX2_HOME" ]; then
-		for dir_i in $(find "$PCSX2_HOME" -name *.ini); do
+		for dir_i in $(find -L "$PCSX2_HOME" -name *.ini); do
 			HERE_SLASH=$(echo "$HERE" | sed 's,/,\\\/,g')
 			sed -i "s/=[^[]*\/usr\/lib/=$HERE_SLASH\/usr\/lib/g" "$dir_i"
 		done
