@@ -92,8 +92,8 @@ sed -i '/#MAKEFLAGS=/c MAKEFLAGS="-j2"' /etc/makepkg.conf
 #sed -i "s/^PKGEXT='.pkg.tar.gz'/PKGEXT='.pkg.tar.xz'/" /etc/makepkg.conf
 #sed -i '$a   CFLAGS="$CFLAGS -w"'   /etc/makepkg.conf
 #sed -i '$a CXXFLAGS="$CXXFLAGS -w"' /etc/makepkg.conf
-sed -i 's/^CFLAGS\s*=.*/CFLAGS="-march=nehalem -O2 -pipe -fno-stack-protector"/' /etc/makepkg.conf
-sed -i 's/^CXXFLAGS\s*=.*/CXXFLAGS="-march=nehalem -O2 -pipe -fno-stack-protector"/' /etc/makepkg.conf
+sed -i 's/^CFLAGS\s*=.*/CFLAGS="-march=nehalem -O2 -pipe -ftree-vectorize -fno-stack-protector"/' /etc/makepkg.conf
+sed -i 's/^CXXFLAGS\s*=.*/CXXFLAGS="-march=nehalem -O2 -pipe -ftree-vectorize -fno-stack-protector"/' /etc/makepkg.conf
 #sed -i 's/^LDFLAGS\s*=.*/LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"/' /etc/makepkg.conf
 sed -i 's/^#PACKAGER\s*=.*/PACKAGER="DanielDevBR"/' /etc/makepkg.conf
 sed -i 's/^PKGEXT\s*=.*/PKGEXT=".pkg.tar"/' /etc/makepkg.conf
