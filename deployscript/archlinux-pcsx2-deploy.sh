@@ -160,6 +160,7 @@ FULL=$(./git-describe-remote.sh https://github.com/PCSX2/pcsx2)
 ARCHV=$(echo $FULL | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
 
 VERSION=$(echo $FULL | cut -d- -f1)
+TYPE=$(echo $FULL | cut -d- -f2)
 RELEASE=$(echo $FULL | cut -d- -f3)
 GITHASH=$(echo $FULL | cut -d- -f4)
 
@@ -167,6 +168,7 @@ echo "=== VERSIONS ==="
 echo "FULL: $FULL"
 echo "ARCHV: $ARCHV"
 echo "VERSION: $VERSION"
+echo "TYPE: $TYPE"
 echo "RELEASE: $RELEASE"
 echo "GITHASH: $GITHASH"
 
@@ -513,15 +515,16 @@ cd ..
 # AppImage generation:
 ./appimagetool.AppImage --appimage-extract
 
-#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-${VERSION}-dev-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2-${VERSION}-dev-${RELEASE}-${GITHASH}-${ARCH}.AppImage
-#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-${VERSION}-dev-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2_NVIDIA-${VERSION}-dev-${RELEASE}-${GITHASH}-${ARCH}.AppImage
-#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-${VERSION}-dev-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-${VERSION}-dev-${RELEASE}-${GITHASH}-${ARCH}.AppImage
-#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-${VERSION}-dev-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-${VERSION}-dev-${RELEASE}-${GITHASH}-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2_NVIDIA-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-${ARCH}.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-${VERSION}-${TYPE}-${RELEASE}-${GITHASH}-${ARCH}.AppImage
 
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-${VERSION}-rc-*arch*.AppImage.zsync' pcsx2-${VERSION}-rc-${ARCH}.AppImage
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-${VERSION}-rc-*arch*.AppImage.zsync' pcsx2_NVIDIA-${VERSION}-rc-${ARCH}.AppImage
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-${VERSION}-rc-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-${VERSION}-rc-${ARCH}.AppImage
-export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-${VERSION}-rc-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-${VERSION}-rc-${ARCH}.AppImage
+## tmp name:
+#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2-${VERSION}-${TYPE}-*arch*.AppImage.zsync' pcsx2-${VERSION}-${TYPE}-${ARCH}.AppImage
+#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA-${VERSION}-${TYPE}-*arch*.AppImage.zsync' pcsx2_NVIDIA-${VERSION}-${TYPE}-${ARCH}.AppImage
+#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_390xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA390xx-${VERSION}-${TYPE}-*arch*.AppImage.zsync' pcsx2_NVIDIA390xx-${VERSION}-${TYPE}-${ARCH}.AppImage
+#export ARCH=x86_64; squashfs-root/AppRun -v $PCSX2_NVIDIA_340xx_WORKDIR -u 'gh-releases-zsync|ferion11|pcsx2_Appimage|continuous|pcsx2_NVIDIA340xx-${VERSION}-${TYPE}-*arch*.AppImage.zsync' pcsx2_NVIDIA340xx-${VERSION}-${TYPE}-${ARCH}.AppImage
 
 
 echo "Packing tar result file..."
