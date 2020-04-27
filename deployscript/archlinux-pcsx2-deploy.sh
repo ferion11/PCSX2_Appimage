@@ -124,8 +124,8 @@ echo "Set disable_coredump false" >> /etc/sudo.conf
 echo "DEBUG: updating pacmam keys"
 pacman -Syy && pacman -S archlinuxcn-keyring
 
-#echo "DEBUG: pacmam sync"
-#pacman -Syy
+echo "DEBUG: pacmam sync"
+pacman -Syy
 
 echo "DEBUG: pacmam updating system"
 pacman -Syu
