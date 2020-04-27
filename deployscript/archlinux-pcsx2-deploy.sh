@@ -78,6 +78,7 @@ get_archlinux32_pkgs() {
 echo "DEBUG: starting and configuring pacmam"
 # pacman-key: need it
 #pacman -S --noconfirm gawk
+pacman -S --noconfirm nawk
 
 #Initializing the keyring requires entropy
 pacman-key --init
@@ -132,7 +133,7 @@ pacman -Syu --noconfirm
 
 echo "DEBUG: pacmam install basic tools"
 #Add "gcc lib32-gcc-libs" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep zstd xz nawk png++ xorgproto libffi
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep zstd xz png++ xorgproto libffi
 #===========================================================================================
 
 echo "DEBUG: git-describe-remote.sh getting info"
