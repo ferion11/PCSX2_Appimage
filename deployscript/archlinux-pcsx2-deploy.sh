@@ -122,13 +122,13 @@ echo "" >> /etc/pacman.conf
 echo "Set disable_coredump false" >> /etc/sudo.conf
 
 echo "DEBUG: updating pacmam keys"
-pacman -Syy && pacman -S archlinuxcn-keyring
+pacman -Syy --noconfirm && pacman --noconfirm -S archlinuxcn-keyring
 
 echo "DEBUG: pacmam sync"
-pacman -Syy
+pacman -Syy --noconfirm
 
 echo "DEBUG: pacmam updating system"
-pacman -Syu
+pacman -Syu --noconfirm
 
 echo "DEBUG: pacmam install basic tools"
 #Add "gcc lib32-gcc-libs" for compile in the list:
