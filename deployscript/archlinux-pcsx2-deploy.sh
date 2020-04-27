@@ -207,20 +207,30 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #sudo -u nobody git clone https://aur.archlinux.org/libffi6.git
 #cd libffi6
 #sudo -u nobody makepkg --syncdeps --noconfirm
-#echo "* All files HERE: $(ls ./)"
+#echo "* All files HERE: $(sudo -u nobody ls ./)"
 #mkdir output_pkg
 #mv libffi6*.pkg.tar ./output_pkg || die "ERROR: Can't create the libffi6 package"
 #pacman -U ./output_pkg/libffi6*.pkg.tar
 #cd ..
 #------------------
 
-echo "DEBUG: making nvidia old package"
+echo "DEBUG: making nvidia old 340xx package"
 # lib32-nvidia-340xx-utils from https://aur.archlinux.org/packages/lib32-nvidia-340xx-utils/
 sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-340xx-utils.git
 cd lib32-nvidia-340xx-utils
 sudo -u nobody makepkg --syncdeps --noconfirm
-echo "* All files HERE: $(ls ./)"
+echo "* All files HERE: $(sudo -u nobody ls ./)"
 mv lib32-nvidia-340xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-nvidia-340xx-utils package"
+cd ..
+#------------------
+
+echo "DEBUG: making nvidia old 390xx package"
+# lib32-nvidia-390xx-utils from https://aur.archlinux.org/packages/lib32-nvidia-390xx-utils/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-390xx-utils.git
+cd lib32-nvidia-390xx-utils
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(sudo -u nobody ls ./)"
+mv lib32-nvidia-390xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-nvidia-390xx-utils package"
 cd ..
 #------------------
 
@@ -352,7 +362,7 @@ EOF
 #-------
 cd pcsx2-git
 sudo -u nobody makepkg --syncdeps --noconfirm
-echo "* All files HERE: $(ls ./)"
+echo "* All files HERE: $(sudo -u nobody ls ./)"
 mv *.pkg.tar ../ || die "ERROR: Can't create the pcsx2-git package"
 cd ..
 #------------------
@@ -371,12 +381,12 @@ dependencys=$(pactree -s -u pcsx2-git |grep lib32 | xargs)
 mkdir cache
 
 pacman -Scc --noconfirm
-pacman -Syw --noconfirm --cachedir cache lib32-nvidia-utils lib32-nvidia-390xx-utils lib32-alsa-lib lib32-alsa-plugins lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-sdl2 lib32-libdrm lib32-libva lib32-portaudio lib32-sdl2 lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-ladspa lib32-libao lib32-libpulse lib32-libcanberra-pulse lib32-glew lib32-mesa-demos lib32-libxinerama lib32-gtk2 lib32-wxgtk2 $dependencys || die "ERROR: Some packages not found!!!"
+pacman -Syw --noconfirm --cachedir cache lib32-nvidia-utils lib32-alsa-lib lib32-alsa-plugins lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-sdl2 lib32-libdrm lib32-libva lib32-portaudio lib32-sdl2 lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-ladspa lib32-libao lib32-libpulse lib32-libcanberra-pulse lib32-glew lib32-mesa-demos lib32-libxinerama lib32-gtk2 lib32-wxgtk2 $dependencys || die "ERROR: Some packages not found!!!"
 #---------------------------------
 
 #Save nvidia packages for later
 mv ./cache/lib32-nvidia-utils* ../
-mv ./cache/lib32-nvidia-390xx-utils* ../
+mv ./lib32-nvidia-390xx-utils* ../
 mv ./lib32-nvidia-340xx-utils* ../
 
 # Remove non lib32 pkgs before extracting (save pcsx2 package):
