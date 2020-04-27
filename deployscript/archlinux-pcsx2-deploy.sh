@@ -78,7 +78,7 @@ get_archlinux32_pkgs() {
 echo "DEBUG: starting and configuring pacmam"
 # pacman-key: need it
 #pacman -S --noconfirm gawk
-pacman -S --noconfirm nawk
+#pacman -S --noconfirm nawk
 
 #Initializing the keyring requires entropy
 pacman-key --init
@@ -202,16 +202,16 @@ chown nobody.nobody "$PKG_WORKDIR"
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #------------------
 
-echo "DEBUG: making libffi6 package"
-# libffi6 from https://aur.archlinux.org/packages/libffi6/
-sudo -u nobody git clone https://aur.archlinux.org/libffi6.git
-cd libffi6
-sudo -u nobody makepkg --syncdeps --noconfirm
-echo "* All files HERE: $(ls ./)"
-mkdir output_pkg
-mv libffi6*.pkg.tar ./output_pkg || die "ERROR: Can't create the libffi6 package"
-pacman -U ./output_pkg/libffi6*.pkg.tar
-cd ..
+#echo "DEBUG: making libffi6 package"
+## libffi6 from https://aur.archlinux.org/packages/libffi6/
+#sudo -u nobody git clone https://aur.archlinux.org/libffi6.git
+#cd libffi6
+#sudo -u nobody makepkg --syncdeps --noconfirm
+#echo "* All files HERE: $(ls ./)"
+#mkdir output_pkg
+#mv libffi6*.pkg.tar ./output_pkg || die "ERROR: Can't create the libffi6 package"
+#pacman -U ./output_pkg/libffi6*.pkg.tar
+#cd ..
 #------------------
 
 echo "DEBUG: making nvidia old package"
