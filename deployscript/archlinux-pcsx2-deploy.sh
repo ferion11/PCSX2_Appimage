@@ -157,13 +157,14 @@ chmod +x git-describe-remote.sh
 
 FULL=$(./git-describe-remote.sh https://github.com/PCSX2/pcsx2)
 
-ARCHV=$(echo $FULL | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
-ARCHV=$(echo $ARCHV | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
-
 VERSION=$(echo $FULL | cut -d- -f1)
 TYPE=$(echo $FULL | cut -d- -f2)
 RELEASE=$(echo $FULL | cut -d- -f3)
 GITHASH=$(echo $FULL | cut -d- -f4)
+
+#ARCHV=$(echo $FULL | sed 's/^v//; s/-dev//; s/-/.r/; s/-g/./')
+#ARCHV=$(echo $FULL | sed 's/^v//; s/-rc//; s/-/.r/; s/-g/./')
+ARCHV=$(echo $FULL | sed "s/^v//; s/-$TYPE//; s/-/.r/; s/-g/./")
 
 echo "=== VERSIONS ==="
 echo "FULL: $FULL"
