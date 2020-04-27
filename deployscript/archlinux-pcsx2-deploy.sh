@@ -129,7 +129,7 @@ pacman -Syy
 
 echo "DEBUG: pacmam install basic tools"
 #Add "gcc lib32-gcc-libs" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep zstd xz
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep zstd xz png++ xorgproto libffi
 #===========================================================================================
 
 echo "DEBUG: git-describe-remote.sh getting info"
