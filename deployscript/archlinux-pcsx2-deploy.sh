@@ -197,14 +197,26 @@ printf 'nobody ALL=(ALL) ALL\n' | tee -a /etc/sudoers
 chown nobody.nobody "$PKG_WORKDIR"
 #===========================================================================================
 
-echo "DEBUG: making nvidia old package"
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #------------------
 
+echo "DEBUG: making libffi6 package"
+# libffi6 from https://aur.archlinux.org/packages/libffi6/
+sudo -u nobody git clone https://aur.archlinux.org/libffi6.git
+cd libffi6
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mkdir output_pkg
+mv libffi6*.pkg.tar ./output_pkg || die "ERROR: Can't create the libffi6 package"
+pacman -U ./output_pkg/libffi6*.pkg.tar
+cd ..
+#------------------
+
+echo "DEBUG: making nvidia old package"
 # lib32-nvidia-340xx-utils from https://aur.archlinux.org/packages/lib32-nvidia-340xx-utils/
 sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-340xx-utils.git
-cd  lib32-nvidia-340xx-utils
+cd lib32-nvidia-340xx-utils
 sudo -u nobody makepkg --syncdeps --noconfirm
 echo "* All files HERE: $(ls ./)"
 mv lib32-nvidia-340xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-nvidia-340xx-utils package"
