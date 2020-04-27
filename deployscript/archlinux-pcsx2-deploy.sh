@@ -219,7 +219,7 @@ echo "DEBUG: making nvidia old 340xx package"
 sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-340xx-utils.git
 cd lib32-nvidia-340xx-utils
 sudo -u nobody makepkg --syncdeps --noconfirm
-echo "* All files HERE: $(sudo -u nobody ls ./)"
+#echo "* All files HERE: $(ls ./)"
 mv lib32-nvidia-340xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-nvidia-340xx-utils package"
 cd ..
 #------------------
@@ -229,7 +229,7 @@ echo "DEBUG: making nvidia old 390xx package"
 sudo -u nobody git clone https://aur.archlinux.org/lib32-nvidia-390xx-utils.git
 cd lib32-nvidia-390xx-utils
 sudo -u nobody makepkg --syncdeps --noconfirm
-echo "* All files HERE: $(sudo -u nobody ls ./)"
+#echo "* All files HERE: $(ls ./)"
 mv lib32-nvidia-390xx-utils*.pkg.tar ../ || die "ERROR: Can't create the lib32-nvidia-390xx-utils package"
 cd ..
 #------------------
@@ -362,7 +362,7 @@ EOF
 #-------
 cd pcsx2-git
 sudo -u nobody makepkg --syncdeps --noconfirm
-echo "* All files HERE: $(sudo -u nobody ls ./)"
+#echo "* All files HERE: $(sudo -u nobody ls ./)"
 mv *.pkg.tar ../ || die "ERROR: Can't create the pcsx2-git package"
 cd ..
 #------------------
@@ -515,9 +515,8 @@ mv ../lib32-nvidia-390xx-utils* ./
 rm -rf usr/lib32/dri/nouveau*
 rm -rf usr/lib32/libdrm_nouveau*
 
-# extracting *.pkg.tar.xz *.pkg.tar.zst...
-find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
-find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
+# extracting *.pkg.tar ...
+find ./ -maxdepth 1 -mindepth 1 -name '*.pkg.tar' -exec tar --warning=no-unknown-keyword -xf {} \;
 
 rm -rf lib32-nvidia-390xx-utils*
 cd ..
