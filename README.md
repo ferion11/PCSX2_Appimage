@@ -6,6 +6,7 @@
 
 ####  1- Download "pcsx2-VERSION-x86_64.AppImage" [HERE][PCSX2]
 If you use the proprietary NVIDIA driver, you can download the respective version instead. See link [NVIDIA_LEGACY_LIST][NVIDIA_LEGACY]
+* NOTE: With proprietary NVIDIA, you will need to use the same major version equivalent to the one running on your 64bits system.
 ####  2- Make executable:
 ```
 $ chmod +x pcsx2-VERSION-x86_64.AppImage
